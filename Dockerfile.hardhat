@@ -1,0 +1,20 @@
+# Base image
+FROM node:14
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies including Hardhat locally
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose ports for Hardhat
+EXPOSE 8545
+
+# Run the Hardhat node locally using npx
+CMD ["npx", "hardhat", "node"]

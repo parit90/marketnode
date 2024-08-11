@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  hardhat:
+    build:
+      context: .
+      dockerfile: Dockerfile.hardhat
+    networks:
+      - my-network
+    ports:
+      - "8545:8545"  # Expose the Hardhat node
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    networks:
+      - my-network
+    ports:
+      - "3001:3000"
+    volumes:
+      - .:/usr/src/app
+      - ./artifacts:/usr/src/app/artifacts  # Mount the artifacts directory
+    depends_on:
+      - hardhat
+    environment:
+      - ETHEREUM_URL=http://hardhat:8545
+
+networks:
+  my-network:
+    driver: bridge
